@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Новый товар{% endblock %}
+
+{% block content %}
+<div class="col-lg-3 col-md-6 col-sm-12">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Создание нового товара</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="" class="form-floating">
+                {% csrf_token %}
+                <div class="mb-3 mt-3">
+                    <div class="mb-3">
+                        <textarea class="form-control" id="name" rows="1" placeholder="* Отображаемое наименование товара"></textarea>
+                    </div>
+                </div>
+                <div class="mb-3 mt-3">
+                    <div class="mb-3">
+                        <textarea class="form-control" id="description" rows="3" placeholder="* Описание товара"></textarea>
+                    </div>
+                </div>
+                <div class="mb-3 mt-3">
+                    <input class="form-control" list="datalistOptions" id="category_choice" placeholder="* Выберите категорию товара">
+                        <datalist id="datalistOptions">
+                            {% for category in categories %}
+                                <option value={{ category.name }}>
+                            {% endfor %}
+                        </datalist>
+                </div>
+                <div class="mb-3 mt-3">
+                    <div class="mb-3">
+                        <textarea class="form-control" id="price" rows="1" placeholder="* Цена товара"></textarea>
+                    </div>
+                </div>
+                <div class="mb-3 mt-3">
+                    <input class="form-control" type="file" id="image" placeholder="Выберите файл изображения">
+                </div>
+                <p>* - Обязательные для заполнения поля.</p>
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
