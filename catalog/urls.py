@@ -11,12 +11,6 @@ from .views import (ProductCreateView,
 app_name = CatalogConfig.name
 
 urlpatterns = [
-    # path('', home, name='home'),
-    # path('home/', home, name='home'),
-    # path('contact/', contact, name='contact'),
-    # path('product_detail/<int:product_id>/', product_detail, name='product_detail'),
-    # path('create_product/', create_product, name='create_product'),
-
     path('contact/', ContactView.as_view(), name='contact'),
     path('', HomeListView.as_view(), name='home'),
     path('home/', HomeListView.as_view(), name='home'),
