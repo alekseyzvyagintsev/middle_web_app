@@ -1,0 +1,17 @@
+{% extends 'blog_base.html' %}
+{% load static %}
+
+{% block title %}Редактор статьи{% endblock %}
+
+{% block content %}
+
+<div class="container">
+        <h1 class="mb-5">Редактор статьи</h1>
+        <form method="post" class="form-floating" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-outline-primary">Опубликовать</button>
+            <a href="{% url 'blog:index' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+        </form>
+    </div>
+{% endblock %}
