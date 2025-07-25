@@ -64,7 +64,7 @@ class BlogEntryCreateView(ImageHandlingMixin, CreateView):
         return reverse_lazy('blog:entry_detail', kwargs={'pk': self.object.pk})
 
 
-class BlogEntryUpdateView(ImageHandlingMixin, CreateView):
+class BlogEntryUpdateView(ImageHandlingMixin, UpdateView):
     model = BlogEntry
     form_class = ArticleForm
     template_name = 'blog/blog_form.html'

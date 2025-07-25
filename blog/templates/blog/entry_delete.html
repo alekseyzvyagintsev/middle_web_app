@@ -8,8 +8,10 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-lg btn-block btn-outline-danger">Удалить</button>
-            <a href="{% url 'blog:index' %}" class="btn btn-lg btn-block btn-outline-secondary">Вернуться к списку</a>
+            <div class="mt-4 d-flex align-items-center">
+                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">Удалить</button>
+                <a href="{% url 'blog:index' %}" class="btn btn-sm btn-outline-secondary ms-2">Вернуться к списку</a>
+            </div>
         </form>
     </div>
 {% endblock %}
