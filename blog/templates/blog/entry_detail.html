@@ -28,7 +28,7 @@
     <div class="mt-4 d-flex justify-content-between align-items-center">
         <a href="{% url 'blog:entry_update' blog_entry.id %}" class="btn btn-sm btn-outline-primary">Редактировать</a>
         <a href="{% url 'blog:entry_delete' blog_entry.id %}" class="btn btn-sm btn-outline-danger">Удалить</a>
-        <a href="{% url 'blog:index' %}" class="btn btn-sm btn-outline-secondary">Вернуться к списку</a>
+        <a href="{% url 'blog:active_articles' %}" class="btn btn-sm btn-outline-secondary">Вернуться к списку</a>
     </div>
 </div>
 {% endblock %}

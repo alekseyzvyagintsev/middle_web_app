@@ -12,7 +12,7 @@ from blog.models import BlogEntry
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = BlogEntry
-        fields = ['title', 'entry', 'image']
+        fields = ['title', 'entry', 'image', 'is_active']
 
 
 class ImageHandlingMixin(FormMixin):
@@ -43,7 +43,7 @@ class ImageHandlingMixin(FormMixin):
         return super().form_valid(form)
 
 
-class IndexListView(ListView):
+class ActiveArticlesListView(ListView):
     model = BlogEntry
     paginate_by = 12
     template_name = 'blog/index.html'
@@ -52,6 +52,20 @@ class IndexListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()  # Базовый набор продуктов
         return queryset.order_by('-is_active')
+
+
+class ArchiveArticlesListView(ListView):
+    model = BlogEntry
+    paginate_by = 12
+    template_name = 'blog/index.html'
+    context_object_name = 'entries'
+
+    def get_queryset(self):
+        # Сначала получаем все неактивные статьи
+        queryset = super().get_queryset().filter(is_active=False)
+
+        # Затем сортируем их по дате создания (от новых к старым)
+        return queryset.order_by('-created_at')
 
 
 class BlogEntryCreateView(ImageHandlingMixin, CreateView):
@@ -105,4 +119,4 @@ class BlogEntryDetailView(DetailView):
 class BlogEntryDeleteView(DeleteView):
     model = BlogEntry
     template_name = 'blog/entry_delete.html'
-    success_url = reverse_lazy('blog:index')
+    success_url = reverse_lazy('blog:active_articles')
