@@ -1,8 +1,10 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 text-white bg-dark border-bottom box-shadow">
     <h5 class="my-0 font-weight-normal">У нас пишут!</h5>
     <nav class="ms-5">
-        <a class="p-2 btn btn-outline-light" href="{% url 'blog:index' %}">Статьи</a>
+        <a class="p-2 btn btn-outline-light" href="{% url 'blog:active_articles' %}">Статьи</a>
         <a class="p-2 btn btn-outline-light" href="{% url 'blog:contacts' %}">Контакты</a>
         <a class="p-2 btn btn-outline-light" href="{% url 'blog:create_blog_entry' %}">Создать статью</a>
+        <a class="p-2 btn btn-outline-light" href="{% url 'blog:archive_articles' %}">Архив статей</a>
+        <a class="p-2 btn btn-outline-light" href="{% url 'catalog:home' %}">Магазин</a>
     </nav>
 </div>
