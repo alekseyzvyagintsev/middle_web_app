@@ -1,22 +1,22 @@
 {% extends 'blog_base.html' %}
 {% load static %}
 
-{% block title %}{{ blog_entry.title }}{% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <h1 class="display-4">{{ blog_entry.title }}</h1>
+        <h1 class="display-4">{{ article.title }}</h1>
     </div>
 
     <!-- Основной контент -->
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <p style="font-size: 1rem;">{{ blog_entry.entry|linebreaksbr }}</p>
+            <p style="font-size: 1rem;">{{ article.entry|linebreaksbr }}</p>
 
-            {% if blog_entry.image %}
+            {% if article.image %}
                 <figure class="figure text-center">
-                    <img src="{{ blog_entry.image.url }}" class="figure-img img-fluid rounded" alt="{{ blog_entry.title }}">
+                    <img src="{{ article.image.url }}" class="figure-img img-fluid rounded" alt="{{ article.title }}">
                 </figure>
             {% else %}
                 <p>Изображение для "{{ article.title }}" отсутствует.</p>

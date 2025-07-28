@@ -76,7 +76,7 @@ class BlogArticleCreateView(ImageHandlingMixin, CreateView):
 
     def get_success_url(self):
         # Определение URL после успешной операции
-        return reverse_lazy('blog:entry_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('blog:article_detail', kwargs={'pk': self.object.pk})
 
 
 class BlogArticleUpdateView(ImageHandlingMixin, UpdateView):
