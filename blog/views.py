@@ -50,8 +50,10 @@ class ActiveArticlesListView(ListView):
     context_object_name = 'entries'
 
     def get_queryset(self):
-        queryset = super().get_queryset()  # Базовый набор продуктов
-        return queryset.order_by('-is_active')
+        # Сначала получаем все активные статьи
+        queryset = super().get_queryset().filter(is_active=True)
+        # Затем сортируем их по дате создания (от новых к старым)
+        return queryset.order_by('-created_at')
 
 
 class ArchiveArticlesListView(ListView):
@@ -63,12 +65,11 @@ class ArchiveArticlesListView(ListView):
     def get_queryset(self):
         # Сначала получаем все неактивные статьи
         queryset = super().get_queryset().filter(is_active=False)
-
         # Затем сортируем их по дате создания (от новых к старым)
         return queryset.order_by('-created_at')
 
 
-class BlogEntryCreateView(ImageHandlingMixin, CreateView):
+class BlogArticleCreateView(ImageHandlingMixin, CreateView):
     model = BlogEntry
     form_class = ArticleForm
     template_name = 'blog/blog_form.html'
@@ -78,14 +79,14 @@ class BlogEntryCreateView(ImageHandlingMixin, CreateView):
         return reverse_lazy('blog:entry_detail', kwargs={'pk': self.object.pk})
 
 
-class BlogEntryUpdateView(ImageHandlingMixin, UpdateView):
+class BlogArticleUpdateView(ImageHandlingMixin, UpdateView):
     model = BlogEntry
     form_class = ArticleForm
     template_name = 'blog/blog_form.html'
 
     def get_success_url(self):
         # Определение URL после успешной операции
-        return reverse_lazy('blog:entry_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('blog:article_detail', kwargs={'pk': self.object.pk})
 
 
 class ContactsView(View):
@@ -100,10 +101,10 @@ class ContactsView(View):
         return render(request, 'blog/contacts.html')
 
 
-class BlogEntryDetailView(DetailView):
+class BlogArticleDetailView(DetailView):
     model = BlogEntry
-    template_name = 'blog/entry_detail.html'
-    context_object_name = 'blog_entry'
+    template_name = 'blog/article_detail.html'
+    context_object_name = 'article'
 
     def get_object(self, queryset=None):
         # Получаем объект записи блога
@@ -116,7 +117,7 @@ class BlogEntryDetailView(DetailView):
         return obj
 
 
-class BlogEntryDeleteView(DeleteView):
+class BlogArticleDeleteView(DeleteView):
     model = BlogEntry
-    template_name = 'blog/entry_delete.html'
+    template_name = 'blog/article_delete.html'
     success_url = reverse_lazy('blog:active_articles')

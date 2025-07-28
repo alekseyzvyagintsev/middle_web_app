@@ -10,7 +10,7 @@
     <div class="card w-100">
         {% for entry in entries %}
             <ul class="list-group list-group-flush">
-                <a class="card-link" href="{% url 'blog:entry_detail' entry.id %}">
+                <a class="card-link" href="{% url 'blog:article_detail' entry.id %}">
                     <li class="list-group-item">{{ entry }}</li>
                 </a>
             </ul>
