@@ -1,16 +1,20 @@
-# from django.urls import path
+from django.urls import path
 from .apps import BlogConfig
-# from .views import ()
+from .views import (BlogArticleCreateView,
+                    ContactsView,
+                    BlogArticleDetailView,
+                    BlogArticleDeleteView,
+                    BlogArticleUpdateView,
+                    ActiveArticlesListView, ArchiveArticlesListView)
 
 app_name = BlogConfig.name
 
-# urlpatterns = [
-#     path('contact/', ContactView.as_view(), name='contact'),
-#     path('', HomeListView.as_view(), name='home'),
-#     path('home/', HomeListView.as_view(), name='home'),
-#     path('product/new/', ProductCreateView.as_view(), name='create_product'),
-#     path('product/list/', ProductListView.as_view(), name='product_list'),
-#     path('product/delete/<int:pk>/', ProductDeleteView.as_view(), name='product_delete'),
-#     path('product/detail/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
-#     path('product/update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
-# ]
+urlpatterns = [
+    path('contacts/', ContactsView.as_view(), name='contacts'),
+    path('articles/list-is-active/', ActiveArticlesListView.as_view(), name='active_articles'),
+    path('articles/archive_list/', ArchiveArticlesListView.as_view(), name='archive_articles'),
+    path('article/new/', BlogArticleCreateView.as_view(), name='create_blog_article'),
+    path('article/delete/<int:pk>/', BlogArticleDeleteView.as_view(), name='article_delete'),
+    path('article/detail/<int:pk>/', BlogArticleDetailView.as_view(), name='article_detail'),
+    path('article/update/<int:pk>/', BlogArticleUpdateView.as_view(), name='article_update'),
+]

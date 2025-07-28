@@ -37,12 +37,6 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ['name', 'description', 'category', 'price', 'image']
 
-    def clean_price(self):
-        price = self.cleaned_data.get('price')
-        if price <= 0:
-            raise forms.ValidationError("Цена должна быть положительной!")
-        return price
-
 
 class ImageHandlingMixin(FormMixin):
     def form_valid(self, form):
