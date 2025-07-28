@@ -1,8 +1,9 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 text-white bg-dark border-bottom box-shadow">
     <h5 class="my-0 font-weight-normal">Skystore</h5>
     <nav class="ms-5">
-        <a class="p-2 btn btn-outline-light" href="/">Каталог</a>
-        <a class="p-2 btn btn-outline-light" href="/contact/">Контакты</a>
-        <a class="p-2 btn btn-outline-light" href="/create_product/">Создать новый товар</a>
+        <a class="p-2 btn btn-outline-light" href="{% url 'catalog:home' %}">Каталог</a>
+        <a class="p-2 btn btn-outline-light" href="{% url 'catalog:contact' %}">Контакты</a>
+        <a class="p-2 btn btn-outline-light" href="{% url 'catalog:product_list' %}">Админимтрирование</a>
+        <a class="p-2 btn btn-outline-light" href="{% url 'blog:active_articles' %}">Список статей</a>
     </nav>
 </div>

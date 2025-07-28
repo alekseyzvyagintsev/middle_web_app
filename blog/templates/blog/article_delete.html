@@ -1,0 +1,17 @@
+{% extends 'blog_base.html' %}
+{% block title %}Удаление статьи{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mb-5">Удаление статьи</h1>
+        <p>Вы уверенны, что хотите удалить {{ entry.name }}</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="mt-4 d-flex align-items-center">
+                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Вы уверены, что хотите удалить эту запись?');">Удалить</button>
+                <a href="{% url 'blog:active_articles' %}" class="btn btn-sm btn-outline-secondary ms-2">Вернуться к списку</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,195 @@
+[
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "smartphones",
+        "description": "Смартфоны на платформах Andrid и Aple"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": "headsets",
+        "description": "Гарнитуры смартфонов"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+        "name": "tv",
+        "description": "Телевизоры"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+        "name": "Смартфон TECNO Pova Neo 6 8/256Gb, черный",
+        "description": "Экран: IPS FHD+, 6.8\" (2460x1080)\r\nПроцессор: MediaTek Helio G99 Ultimate\r\nПамять: оперативная 8 ГБ, встроенная 256 ГБ\r\nАккумулятор: Li-Ion, 7000 мAч, несъемный\r\nПоддержка сетей: 2G, 3G, 4G (LTE)\r\nСканер отпечатка пальцев: сбоку\r\nРазмеры (ШхВхТ): 76.6 х 168.6 х 9.23 мм",
+        "image": "product_images/base_image_cnbFbTn.jpg",
+        "category": 1,
+        "price": 18710.0,
+        "created_at": "2025-07-11T17:24:02.968Z",
+        "updated_at": "2025-07-16T14:58:04.550Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "name": "iphone 16 pro",
+        "description": "512gb White Titanium",
+        "image": "product_images/base_image_6s5BlbH.jpg",
+        "category": 1,
+        "price": 117000.0,
+        "created_at": "2025-07-11T17:24:02.973Z",
+        "updated_at": "2025-07-13T20:28:37.562Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+        "name": "Dream Tech",
+        "description": "",
+        "image": "product_images/base_image.jpg",
+        "category": 2,
+        "price": 210.0,
+        "created_at": "2025-07-11T17:24:02.980Z",
+        "updated_at": "2025-07-13T20:28:11.284Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+        "name": "Наушники JBL Quantum 100, 3.5 мм, накладные, белый",
+        "description": "Диапазон частот: от 20 Гц до 20 кГц\r\nИмпеданс: 32 Ом\r\nТип конструкции: накладные\r\nАкустический тип: закрытые\r\nТип соединения: проводные\r\nМикрофон: гибкий (съемный)",
+        "image": "product_images/Наушники_JBL_Quantum_100.webp",
+        "category": 2,
+        "price": 4490.0,
+        "created_at": "2025-07-11T17:24:02.987Z",
+        "updated_at": "2025-07-16T15:04:09.154Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+        "name": "55\" Телевизор Samsung QE55QN90DAUXRU, Neo QLED, 4K Ultra HD, черненое серебро, СМАРТ ТВ, Tizen OS",
+        "description": "Экран: 3840 x 2160, Neo QLED, 4K Ultra HD, 120 Гц\r\nТюнеры: DVB-T2, DVB-C, DVB-S2\r\nОсобенности: SMART TV, HDR, безрамочный дизайн, настенное крепление, тонкий корпус\r\nЦвет: черненое серебро",
+        "image": "product_images/55_Телевизор_Samsung_QE55QN90DAUXRU.webp",
+        "category": 3,
+        "price": 179999.0,
+        "created_at": "2025-07-11T17:24:02.993Z",
+        "updated_at": "2025-07-16T16:18:43.162Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+        "name": "STARWIND",
+        "description": "Телевизор SW-LED58UG401 58\" 4K UHD, серый металлик",
+        "image": "product_images/base_image_zBayBUg.jpg",
+        "category": 3,
+        "price": 29000.0,
+        "created_at": "2025-07-11T17:24:03.001Z",
+        "updated_at": "2025-07-13T20:28:57.887Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+        "name": "Hartens",
+        "description": "Телевизор HT-32H06B-VZ/M 32\" HD, черный",
+        "image": "product_images/base_image_o7vpzOg.jpg",
+        "category": 3,
+        "price": 10000.0,
+        "created_at": "2025-07-11T17:24:03.009Z",
+        "updated_at": "2025-07-13T20:28:30.080Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+        "name": "55\" Телевизор TCL 55C6K, QLED, 4K Ultra HD, черный, СМАРТ ТВ, Google TV",
+        "description": "Экран: 3840 x 2160, QLED, 4K Ultra HD, 144 Гц\r\nТюнеры: DVB-T, DVB-T2, DVB-C, DVB-S, DVB-S2\r\nОсобенности: SMART TV, HDR, безрамочный дизайн, настенное крепление, тонкий корпус\r\nРаботает с: Google Assistant\r\nЦвет: черный",
+        "image": "product_images/55_Телевизор_TCL_55C6K.webp",
+        "category": 3,
+        "price": 49500.0,
+        "created_at": "2025-07-11T17:24:03.015Z",
+        "updated_at": "2025-07-16T15:00:11.706Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 10,
+    "fields": {
+        "name": "Honor X9c 8/256Gb, фиолетовый",
+        "description": "Экран: AMOLED FHD+, 6.78\" (2700x1224)\r\nПроцессор: Qualcomm Snapdragon 6 Gen 1\r\nПамять: оперативная 8 ГБ, встроенная 256 ГБ\r\nАккумулятор: Si-C, 6600 мAч, несъемный\r\nПоддержка сетей: 2G, 3G, 4G (LTE), 5G\r\nСканер отпечатка пальцев: экран\r\nРазмеры (ШхВхТ): 75.5 х 162.8 х 7.98 мм",
+        "image": "product_images/Honor_X9c.webp",
+        "category": 1,
+        "price": 32000.0,
+        "created_at": "2025-07-16T11:41:32.819Z",
+        "updated_at": "2025-07-16T11:41:32.819Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 11,
+    "fields": {
+        "name": "Наушники Xiaomi Redmi Buds 6 Play, Bluetooth, внутриканальные, черный",
+        "description": "Диапазон частот: от 20 Гц до 20 кГц\r\nИмпеданс: 16 Ом\r\nТип конструкции: внутриканальные\r\nАкустический тип: закрытые\r\nТип соединения: беспроводные bluetooth, True Wireless\r\nМикрофон: встроенный",
+        "image": "product_images/Наушники_Xiaomi_Redmi_Buds_6_Play.webp",
+        "category": 2,
+        "price": 1099.0,
+        "created_at": "2025-07-16T14:54:35.608Z",
+        "updated_at": "2025-07-16T14:54:35.608Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 12,
+    "fields": {
+        "name": "Наушники Samsung Galaxy Buds 3 Pro, Bluetooth, внутриканальные, серебристый",
+        "description": "Тип конструкции: внутриканальные\r\nТип соединения: беспроводные bluetooth\r\nМикрофон: встроенный",
+        "image": "product_images/Наушники_Samsung_Galaxy_Buds_3_Pro.webp",
+        "category": 2,
+        "price": 13990.0,
+        "created_at": "2025-07-16T14:56:35.315Z",
+        "updated_at": "2025-07-16T14:56:35.315Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 13,
+    "fields": {
+        "name": "Смартфон TECNO Spark 30 8/256Gb, черный",
+        "description": "Экран: IPS, 6.78\" (2436x1080)\r\nПроцессор: MediaTek Helio G91\r\nПамять: оперативная 8 ГБ, встроенная 256 ГБ\r\nАккумулятор: Li-Pol, 5000 мAч, несъемный\r\nПоддержка сетей: 2G, 3G, 4G (LTE)\r\nСканер отпечатка пальцев: сбоку\r\nРазмеры (ШхВхТ): 76.43 х 168 х 7.7 мм",
+        "image": "product_images/256Gb.webp",
+        "category": 1,
+        "price": 9490.0,
+        "created_at": "2025-07-16T15:02:27.095Z",
+        "updated_at": "2025-07-16T15:02:27.095Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 14,
+    "fields": {
+        "name": "Смартфон Samsung Galaxy S25 Ultra 12/512Gb, SM-S938B, черный титан",
+        "description": "Экран: AMOLED Dynamic AMOLED 2X QHD+, 6.9\" (3120x1440)\r\nПроцессор: Qualcomm Snapdragon 8 Elite\r\nПамять: оперативная 12 ГБ, встроенная 512 ГБ\r\nАккумулятор: Li-Ion, 5000 мAч, несъемный\r\nПоддержка сетей: 2G, 3G, 4G (LTE), 5G\r\nСканер отпечатка пальцев: экран\r\nРазмеры (ШхВхТ): 77.6 х 162.8 х 8.2 мм",
+        "image": "product_images/Смартфон_Samsung_Galaxy_S25_Ultra_3.webp",
+        "category": 1,
+        "price": 129990.0,
+        "created_at": "2025-07-16T15:06:28.849Z",
+        "updated_at": "2025-07-16T15:09:53.516Z"
+    }
+}
+]

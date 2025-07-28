@@ -1,93 +1,116 @@
-from django.contrib import messages
+from django import forms
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.files.storage.filesystem import FileSystemStorage
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, View
+from django.views.generic.edit import CreateView, DeleteView, UpdateView, FormMixin
 
 from catalog.models import Product, Category
 
 
-def home(request):
-    products = Product.objects.all()
-    paginator = Paginator(products, 12)  # Устанавливаем 12 продуктов на странице
-    page_number = request.GET.get('page')  # Берём номер страницы из URL
-    page_obj = paginator.get_page(page_number)  # Получаем нужную страницу
-    context = {'page_obj': page_obj}
-    return render(request, 'products/home.html', context)
+class HomeListView(ListView):
+    model = Product
+    paginate_by = 12
+    template_name = 'products/home.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()  # Базовый набор продуктов
+        return queryset.order_by('-category')
 
 
-def contact(request):
-    if request.method == 'POST':
+class ContactView(View):
+    def get(self, request):
+        return render(request, 'products/contact.html')
+
+    def post(self, request):
         name = request.POST.get('name')
-        email = request.POST.get('phone')
+        phone = request.POST.get('phone')
         message = request.POST.get('message')
-        print(f'You have new message from {name}({email}): {message}')
-    return render(request, 'products/contact.html')
+        print(f'You have new message from {name}({phone}): {message}')
+        return render(request, 'products/contact.html')
 
 
-def product_detail(request, product_id=1):
-    try:
-        product = Product.objects.get(id=product_id)
-    except Product.DoesNotExist:
-        return redirect('catalog:home')
-
-    cotext = {'product': product, }
-    return render(request, 'products/product_detail.html', context=cotext)
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'category', 'price', 'image']
 
 
-def create_product(request):
-    categories = Category.objects.all()
-    context = {'categories': categories}
+class ImageHandlingMixin(FormMixin):
+    def form_valid(self, form):
+        """
+        Общая логика обработки изображения и сохранение формы.
+        """
+        # проверяем, отмечено ли удаление изображения
+        image_clear = self.request.POST.get('image-clear')
+        # Получаем форму и добавляем обработку изображения
+        uploaded_image = self.request.FILES.get('image')
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        category_in = request.POST.get('category_name')
-        price = request.POST.get('price')
+        if uploaded_image:
+            # Сохраняем изображение во временную директорию
+            fs = FileSystemStorage(location='media/product_images')
+            filename = fs.save(uploaded_image.name, uploaded_image)
 
-        # Берём файл из request.FILES
-        uploaded_image = request.FILES.get('image')
+            # Устанавливаем путь к изображению
+            form.instance.image = f'product_images/{filename}'
+        elif image_clear:
+            # Если отметили удаление изображения, ставим None или пустую строку
+            form.instance.image = ''
+        else:
+            # Если изображение не передано, устанавливаем базовую картинку
+            form.instance.image = 'product_images/base_image.jpg'
 
-        # Проверка обязательных полей
-        if not name or not description or not category_in or not price:
-            messages.error(request, 'Все обязательные поля должны быть заполнены!')
-            return render(request, 'products/create_product.html', context)
+        # Возвращаем стандартный процесс сохранения
+        return super().form_valid(form)
 
-        try:
-            # Получаем категорию
-            category = Category.objects.get(name=category_in)
 
-            # Обработка изображения
-            if uploaded_image:
-                # Сохраняем файл временно и присваиваем путь к новому товару
-                fs = FileSystemStorage(location='media/product_images')
-                filename = fs.save(uploaded_image.name, uploaded_image)
-                img_path = f'product_images/{filename}'
+class ProductCreateView(ImageHandlingMixin, SuccessMessageMixin, CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'products/create_product.html'
+    success_message = 'Вы успешно создали новый товар!'
+    success_url = reverse_lazy('catalog:product_list')
 
-                product = Product.objects.create(
-                    name=name,
-                    description=description,
-                    category=category,
-                    price=price,
-                    image=img_path
-                )
-            else:
-                product = Product.objects.create(
-                    name=name,
-                    description=description,
-                    category=category,
-                    price=price,
-                    image='product_images/base_image.jpg'
-                )
+    def get_context_data(self, **kwargs):
+        """ Добавляем категории в контекст шаблона """
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
-            messages.success(request, f'Вы успешно создали новый товар: {product.name}')
-            return redirect('catalog:home')
 
-        except Category.DoesNotExist:
-            messages.error(request, f"Категория '{category_in}' не найдена.")
-            return render(request, 'products/create_product.html', context)
+class ProductListView(ListView):
+    model = Product
+    paginate_by = 12
+    template_name = 'products/product_list.html'
+    context_object_name = 'products'
 
-        except Exception as e:
-            messages.error(request, str(e))
-            return render(request, 'products/create_product.html', context)
+    def get_queryset(self):
+        queryset = super().get_queryset()  # Базовый набор продуктов
+        return queryset.order_by('-updated_at')
 
-    return render(request, 'products/create_product.html', context)
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'products/product_detail.html'
+    context_object_name = 'product'
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'products/product_confirm_delete.html'
+    success_url = reverse_lazy('catalog:product_list')
+
+
+class ProductUpdateView(ImageHandlingMixin, SuccessMessageMixin, UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'products/create_product.html'
+    success_message = 'Вы успешно обновили товар!'
+    success_url = reverse_lazy('catalog:product_list')
+
+    def get_context_data(self, **kwargs):
+        """ Добавляем категории в контекст шаблона """
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
