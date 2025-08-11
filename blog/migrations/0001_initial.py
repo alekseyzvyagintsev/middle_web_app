@@ -7,26 +7,25 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='BlogEntry',
+            name="BlogEntry",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200, unique=True, verbose_name='Заголовок')),
-                ('entry', models.TextField(blank=True, null=True)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='blog_images/')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('view_counter', models.PositiveIntegerField(default=0)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("title", models.CharField(max_length=200, unique=True, verbose_name="Заголовок")),
+                ("entry", models.TextField(blank=True, null=True)),
+                ("image", models.ImageField(blank=True, null=True, upload_to="blog_images/")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("view_counter", models.PositiveIntegerField(default=0)),
             ],
             options={
-                'verbose_name': 'статья',
-                'verbose_name_plural': 'статьи',
-                'db_table': 'article',
-                'ordering': ['title'],
+                "verbose_name": "статья",
+                "verbose_name_plural": "статьи",
+                "db_table": "article",
+                "ordering": ["title"],
             },
         ),
     ]

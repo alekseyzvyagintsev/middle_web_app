@@ -1,17 +1,19 @@
 import json
+
 from django.core.management.base import BaseCommand
+
 from catalog.models import Category, Product
 
 
 class Command(BaseCommand):
-    help = 'Импорт товаров и категорий из файла в базу данных.'
+    help = "Импорт товаров и категорий из файла в базу данных."
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--file',
+            "--file",
             type=str,
             default="catalog_fixture.json",
-            help='Путь к файлу JSON с товарами и категориями.',
+            help="Путь к файлу JSON с товарами и категориями.",
         )
 
     def handle(self, *args, **options):
@@ -54,10 +56,7 @@ class Command(BaseCommand):
                     raise ValueError(f"Категория с ID={category_id} не найдена.")
 
                 # Создаем товар, связывая его с категорией
-                product, _ = Product.objects.get_or_create(id=pk, defaults={
-                    **product_data,
-                    "category": category
-                })
+                product, _ = Product.objects.get_or_create(id=pk, defaults={**product_data, "category": category})
 
                 self.stdout.write(self.style.SUCCESS(f"Товар '{product.name}' добавлен."))
 
