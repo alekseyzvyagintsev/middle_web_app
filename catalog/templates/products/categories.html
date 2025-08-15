@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Список категорий{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Список категорий</h1>
+</div>
+
+<div class="container mt-5 mb-5">
+    <a href="{% url 'catalog:create_category' %}" class="btn btn-lg btn-block btn-outline-primary mt-5 mb-5">Добавить категорию</a>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-4 g-5">
+        {% for category in categories %}
+            <div class="col">
+                <div class="card h-100 d-flex flex-column shadow-sm" style="width: 15rem;">
+                    <div class="card-body flex-grow-1">
+                        <a class="card-link" href="{% url 'catalog:category_detail' category.id %}">
+                            <h5 class="card-title">{{ category.name }}</h5>
+                        </a>
+                        <p class="card-text">{{ category.description | truncatechars:100 }}</p>
+                    </div>
+                    <div class="card-footer d-flex align-items-end pb-3 pt-0">
+                        <div>
+                            <a href="{% url 'catalog:category_update' category.id %}" class="p-2 btn btn-outline-secondary w-100 mt-3 mb-1">Редактировать</a>
+                            <a href="{% url 'catalog:category_delete' category.id %}" class="p-2 btn btn-outline-danger w-100 mt-3 mb-1">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

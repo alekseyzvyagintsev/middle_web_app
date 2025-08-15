@@ -18,6 +18,6 @@
     </div>
     <a href="{% url 'catalog:product_update' product.id %}" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Редактировать</a>
     <a href="{% url 'catalog:product_delete' product.id %}" class="btn btn-lg btn-block btn-outline-danger" mt-3 mb-1>Удалить</a>
-    <a href="{% url 'catalog:product_list' %}" class="btn btn-lg btn-block btn-outline-secondary">Вернуться к списку</a>
+    <a href="{% url 'catalog:products' %}" class="btn btn-lg btn-block btn-outline-secondary">Вернуться к списку</a>
 </div>
 {% endblock %}

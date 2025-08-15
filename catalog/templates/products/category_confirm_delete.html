@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Удаление категории{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mb-5">Удаление категории "{{ category.name }}"</h1>
+        <p>Вы уверенны, что хотите удалить категорию "{{ category.name }}" и входящие в неё продукты?</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-lg btn-block btn-outline-danger">Удалить</button>
+            <a href="{% url 'catalog:categories' %}" class="btn btn-lg btn-block btn-outline-secondary">Вернуться к списку</a>
+        </form>
+    </div>
+{% endblock %}
