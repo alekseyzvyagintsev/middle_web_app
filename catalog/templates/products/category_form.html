@@ -1,0 +1,16 @@
+{% extends 'base_templates/base.html' %}
+{% block title %}Форма для категории{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="mb-5">Форма для категории</h1>
+    <form method="post" class="form-floating" enctype="multipart/form-data">
+        {% csrf_token %}
+            {{ form.as_p }}
+        <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Сохранить</button>
+        <a href="{% url 'catalog:categories' %}" class="btn btn-lg btn-block btn-outline-secondary">Отмена</a>
+    </form>
+</div>
+
+{% endblock %}

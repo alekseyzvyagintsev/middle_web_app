@@ -1,0 +1,20 @@
+{% extends 'base_templates/base.html' %}
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Свежие статьи</h1>
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="card w-100">
+        {% for entry in entries %}
+            <ul class="list-group list-group-flush">
+                <a class="card-link" href="{% url 'blog:article_detail' entry.id %}">
+                    <li class="list-group-item">{{ entry }}</li>
+                </a>
+            </ul>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

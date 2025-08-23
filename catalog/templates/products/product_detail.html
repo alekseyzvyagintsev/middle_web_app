@@ -1,0 +1,23 @@
+{% extends 'base_templates/base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">{{ product.name }}</h1>
+    </div>
+
+    <div class="container">
+        <h1>{{ product.price }} р.</h1>
+        <p>Описание: {{ product.description }}</p>
+        {% if product.image %}
+            <p><img src="{{ product.image.url }}" alt="{{ product.name }}"></p>
+        {% else %}
+            Изображение {{ product.name }} отсутствует
+        {% endif %}
+    </div>
+    <a href="{% url 'catalog:product_update' product.id %}" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Редактировать</a>
+    <a href="{% url 'catalog:product_delete' product.id %}" class="btn btn-lg btn-block btn-outline-danger" mt-3 mb-1>Удалить</a>
+    <a href="{% url 'catalog:products' %}" class="btn btn-lg btn-block btn-outline-secondary">Вернуться к списку</a>
+</div>
+{% endblock %}
