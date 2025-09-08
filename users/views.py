@@ -1,5 +1,6 @@
 #################################################################################################
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, DeleteView
@@ -38,6 +39,17 @@ class AvatarHandlingMixin(FormMixin):
 
         # Возвращаем стандартный процесс сохранения
         return super().form_valid(form)
+
+
+class CustomLoginView(LoginView):
+    model = CustomUser
+    template_name = 'users/login.html'  # Укажите ваш шаблон
+
+    def get_success_url(self):
+        # Получаем id пользователя после успешной авторизации
+        user_id = self.request.user.id
+        # Формируем URL с id пользователя
+        return reverse_lazy('users:profile', kwargs={'pk': user_id})
 
 
 class RegisterView(CreateView):

@@ -1,6 +1,8 @@
 ######################################################################################
 from django.db import models
 
+from users.models import CustomUser
+
 
 class Category(models.Model):
     """Класс
@@ -40,6 +42,8 @@ class Product(models.Model):
     price = models.FloatField(default=0.0, verbose_name="цена за покупку")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    published = models.BooleanField(default=True)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owner_products')
 
     def __str__(self):
         return f"{self.category} {self.name} {self.price}"
@@ -49,6 +53,9 @@ class Product(models.Model):
         verbose_name_plural = "продукты"
         ordering = ["name"]
         db_table = "product"
+        permissions = [
+            ('can_unpublish_product', 'can unpublish product')
+        ]
 
 
 ######################################################################################

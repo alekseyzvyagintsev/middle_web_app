@@ -20,8 +20,12 @@
                     </div>
                     <div class="card-footer d-flex align-items-end pb-3 pt-0">
                         <div>
-                            <a href="{% url 'catalog:category_update' category.id %}" class="p-2 btn btn-outline-secondary w-100 mt-3 mb-1">Редактировать</a>
-                            <a href="{% url 'catalog:category_delete' category.id %}" class="p-2 btn btn-outline-danger w-100 mt-3 mb-1">Удалить</a>
+                            {% if perms.catalog.change_category %}
+                                <a href="{% url 'catalog:category_update' category.id %}" class="p-2 btn btn-outline-secondary w-100 mt-3 mb-1">Редактировать</a>
+                            {% endif %}
+                            {% if perms.catalog.delete_category %}
+                                <a href="{% url 'catalog:category_delete' category.id %}" class="p-2 btn btn-outline-danger w-100 mt-3 mb-1">Удалить</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
