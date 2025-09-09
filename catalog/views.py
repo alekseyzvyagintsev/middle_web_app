@@ -1,8 +1,11 @@
 #################################################################################################
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.models import Group
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import PermissionDenied
 from django.core.files.storage.filesystem import FileSystemStorage
-from django.shortcuts import render
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, DeleteView, FormMixin, UpdateView
@@ -62,24 +65,27 @@ class ContactView(View):
         return render(request, "products/contact.html")
 
 
-class CategoryCreateView(LoginRequiredMixin, CreateView):
+class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = "products/category_form.html"
     success_url = reverse_lazy("catalog:categories")
+    permission_required = 'catalog.add_category'
 
 
-class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = "products/category_form.html"
     success_url = reverse_lazy("catalog:categories")
+    permission_required = 'catalog.change_category'
 
 
-class CategoryDetailView(LoginRequiredMixin, DetailView):
+class CategoryDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Category
     template_name = "products/category_detail.html"
     context_object_name = "category"
+    permission_required = 'catalog.view_category'
 
     def get_context_data(self, **kwargs):
         """Добавляем продукты данной категории в контекст шаблона"""
@@ -95,29 +101,50 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Category
     template_name = "products/category_confirm_delete.html"
     success_url = reverse_lazy("catalog:categories")
+    permission_required = 'catalog.delete_category'
 
 
-class CategoryListView(LoginRequiredMixin, ListView):
+class CategoryListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Category
     paginate_by = 12
     template_name = "products/categories.html"
     context_object_name = "categories"
+    permission_required = 'catalog.view_category'
 
     def get_queryset(self):
         queryset = super().get_queryset()  # Базовый набор продуктов
         return queryset.order_by("-updated_at")
 
 
-class ProductCreateView(LoginRequiredMixin, ImageHandlingMixin, SuccessMessageMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, ImageHandlingMixin, SuccessMessageMixin,
+                        CreateView):
     model = Product
     form_class = ProductForm
     template_name = "products/product_form.html"
     success_message = "Вы успешно создали новый товар!"
     success_url = reverse_lazy("catalog:products")
+    permission_required = 'catalog.add_product'
+
+    def form_valid(self, form):
+        """
+        Метод вызывается, когда форма прошла валидацию.
+        Здесь мы добавляем текущего пользователя в качестве владельца товара.
+        """
+        # Получаем объект продукта из формы
+        obj = form.save(commit=False)
+
+        # Устанавливаем текущего пользователя в качестве владельца
+        obj.owner = self.request.user
+
+        # Сохраняем объект продукта в базе данных
+        obj.save()
+
+        # Возвращаем стандартный ответ родительского класса
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         """Добавляем категории в контекст шаблона"""
@@ -126,7 +153,23 @@ class ProductCreateView(LoginRequiredMixin, ImageHandlingMixin, SuccessMessageMi
         return context
 
 
-class ProductUpdateView(LoginRequiredMixin, ImageHandlingMixin, SuccessMessageMixin, UpdateView):
+class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'catalog.can_unpublish_product'
+
+    def post(self, request, *args, **kwargs):
+        product = get_object_or_404(Product, pk=self.kwargs['pk'])
+
+        if product.published is True:
+            product.published = False
+        else:
+            product.published = True
+        product.save()
+
+        return redirect('catalog:products')
+
+
+class ProductUpdateView(LoginRequiredMixin, ImageHandlingMixin, SuccessMessageMixin,
+                        UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "products/product_form.html"
@@ -135,15 +178,33 @@ class ProductUpdateView(LoginRequiredMixin, ImageHandlingMixin, SuccessMessageMi
 
     def get_context_data(self, **kwargs):
         """Добавляем категории в контекст шаблона"""
-        context = super().get_context_data(**kwargs)
-        context["categories"] = Category.objects.all()
-        return context
+        user = self.request.user
+        if user == self.object.owner:
+            context = super().get_context_data(**kwargs)
+            context["categories"] = Category.objects.all()
+            return context
+        else:
+            raise PermissionDenied
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "products/product_confirm_delete.html"
     success_url = reverse_lazy("catalog:products")
+
+    def dispatch(self, request, *args, **kwargs):
+        # Получаем объект модели
+        obj = self.get_object()
+
+        # Проверяем, принадлежит ли пользователь группе Модераторов
+        is_moderator = Group.objects.filter(name='Модератор продуктов', user=self.request.user).exists()
+
+        # Если пользователь не является ни владельцем, ни модератором, запрещаем удаление
+        if not (is_moderator or obj.owner == self.request.user):
+            return PermissionDenied("Вы не имеете прав на удаление этого товара.")
+
+        # Если проверка прошла успешно, выполняем стандартное удаление
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProductListView(LoginRequiredMixin, ListView):
@@ -153,8 +214,12 @@ class ProductListView(LoginRequiredMixin, ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        queryset = super().get_queryset()  # Базовый набор продуктов
-        return queryset.order_by("-updated_at")
+        if self.request.user.is_superuser or self.request.user.has_perm('catalog.can_unpublish_product'):
+            queryset = super().get_queryset()  # Показываем ВСЕ товары, если у пользователя есть соответствующее право
+        else:
+            queryset = super().get_queryset().filter(
+                owner=self.request.user)  # Иначе показываем только собственные товары
+        return queryset.order_by('-updated_at')
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -162,5 +227,9 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     template_name = "products/product_detail.html"
     context_object_name = "product"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user  # Добавляем текущего пользователя в контекст
+        return context
 
 #################################################################################################
