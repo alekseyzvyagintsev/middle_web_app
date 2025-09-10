@@ -4,14 +4,18 @@ from django.contrib.auth.models import Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage.filesystem import FileSystemStorage
-from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.core.cache import cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, DeleteView, FormMixin, UpdateView
 
 from catalog.forms import CategoryForm, ProductForm
 from catalog.models import Category, Product
+from catalog.services import get_products_by_category
+from users.models import CustomUser
 
 
 class ImageHandlingMixin(FormMixin):
@@ -81,11 +85,10 @@ class CategoryUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     permission_required = 'catalog.change_category'
 
 
-class CategoryDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = "products/category_detail.html"
     context_object_name = "category"
-    permission_required = 'catalog.view_category'
 
     def get_context_data(self, **kwargs):
         """Добавляем продукты данной категории в контекст шаблона"""
@@ -93,12 +96,19 @@ class CategoryDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView
         # Берём id текущей категории
         category_id = self.object.id
         # Фильтруем товары по текущей категории
-        products_in_category = Product.objects.filter(category=category_id)
+        products_in_category = get_products_by_category(category=category_id)
         # Передаём продукты в контекст
         context["products"] = products_in_category
         # Передаем количество товаров в категории
         context["product_count"] = len(products_in_category)
         return context
+
+    def get_request(self):
+        request = cache.get('cached_request')
+        if not request:
+            request = super().get_queryset()
+            cache.set('cached_request', request, 60 * 15)
+        return request
 
 
 class CategoryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
@@ -108,12 +118,11 @@ class CategoryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
     permission_required = 'catalog.delete_category'
 
 
-class CategoryListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     paginate_by = 12
     template_name = "products/categories.html"
     context_object_name = "categories"
-    permission_required = 'catalog.view_category'
 
     def get_queryset(self):
         queryset = super().get_queryset()  # Базовый набор продуктов
@@ -153,17 +162,17 @@ class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, ImageHandli
         return context
 
 
-class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    permission_required = 'catalog.can_unpublish_product'
+class ProductUnpublishView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         product = get_object_or_404(Product, pk=self.kwargs['pk'])
-
-        if product.published is True:
-            product.published = False
-        else:
-            product.published = True
-        product.save()
+        user = self.request.user
+        if user == product.owner or request.user.has_perm('catalog.can_unpublish_product'):
+            if product.published is True:
+                product.published = False
+            else:
+                product.published = True
+            product.save()
 
         return redirect('catalog:products')
 
@@ -222,6 +231,7 @@ class ProductListView(LoginRequiredMixin, ListView):
         return queryset.order_by('-updated_at')
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "products/product_detail.html"

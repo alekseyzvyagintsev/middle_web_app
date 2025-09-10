@@ -1,10 +1,10 @@
 {% extends 'base_templates/base.html' %}
-{% block title %}Управление списком{% endblock %}
+{% block title %}Управление товарами{% endblock %}
 
 {% block content %}
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
         {% if user.is_superuser or perms.catalog.can_unpublish_product %}
-            <h1 class="display-4 px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">Полный список товаров </h1>
+            <h1 class="display-4 px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">Полный список товаров</h1>
         {% else %}
             <h1 class="display-4 px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">Список Ваших товаров</h1>
         {% endif %}
