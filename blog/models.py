@@ -1,6 +1,8 @@
 ######################################################################################
 from django.db import models
 
+from users.models import CustomUser
+
 
 class BlogEntry(models.Model):
     """
@@ -21,6 +23,7 @@ class BlogEntry(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     view_counter = models.PositiveIntegerField(default=0)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Пользователь", default=1)
 
     def __str__(self):
         state = "опубликована" if self.is_active else "удалена"

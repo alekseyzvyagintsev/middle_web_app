@@ -43,7 +43,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=True)
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owner_products')
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="owner_products", default=1)
 
     def __str__(self):
         return f"{self.category} {self.name} {self.price}"
@@ -53,9 +53,7 @@ class Product(models.Model):
         verbose_name_plural = "продукты"
         ordering = ["name"]
         db_table = "product"
-        permissions = [
-            ('can_unpublish_product', 'can unpublish product')
-        ]
+        permissions = [("can_unpublish_product", "can unpublish product")]
 
 
 ######################################################################################

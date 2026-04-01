@@ -2,11 +2,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage.filesystem import FileSystemStorage
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, ListView, View
@@ -15,7 +15,6 @@ from django.views.generic.edit import CreateView, DeleteView, FormMixin, UpdateV
 from catalog.forms import CategoryForm, ProductForm
 from catalog.models import Category, Product
 from catalog.services import get_products_by_category
-from users.models import CustomUser
 
 
 class ImageHandlingMixin(FormMixin):
@@ -74,7 +73,7 @@ class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView
     form_class = CategoryForm
     template_name = "products/category_form.html"
     success_url = reverse_lazy("catalog:categories")
-    permission_required = 'catalog.add_category'
+    permission_required = "catalog.add_category"
 
 
 class CategoryUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -82,7 +81,7 @@ class CategoryUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     form_class = CategoryForm
     template_name = "products/category_form.html"
     success_url = reverse_lazy("catalog:categories")
-    permission_required = 'catalog.change_category'
+    permission_required = "catalog.change_category"
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -104,10 +103,10 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
         return context
 
     def get_request(self):
-        request = cache.get('cached_request')
+        request = cache.get("cached_request")
         if not request:
             request = super().get_queryset()
-            cache.set('cached_request', request, 60 * 15)
+            cache.set("cached_request", request, 60 * 15)
         return request
 
 
@@ -115,7 +114,7 @@ class CategoryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
     model = Category
     template_name = "products/category_confirm_delete.html"
     success_url = reverse_lazy("catalog:categories")
-    permission_required = 'catalog.delete_category'
+    permission_required = "catalog.delete_category"
 
 
 class CategoryListView(LoginRequiredMixin, ListView):
@@ -129,14 +128,15 @@ class CategoryListView(LoginRequiredMixin, ListView):
         return queryset.order_by("-updated_at")
 
 
-class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, ImageHandlingMixin, SuccessMessageMixin,
-                        CreateView):
+class ProductCreateView(
+    LoginRequiredMixin, PermissionRequiredMixin, ImageHandlingMixin, SuccessMessageMixin, CreateView
+):
     model = Product
     form_class = ProductForm
     template_name = "products/product_form.html"
     success_message = "Вы успешно создали новый товар!"
     success_url = reverse_lazy("catalog:products")
-    permission_required = 'catalog.add_product'
+    permission_required = "catalog.add_product"
 
     def form_valid(self, form):
         """
@@ -165,20 +165,19 @@ class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, ImageHandli
 class ProductUnpublishView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
-        product = get_object_or_404(Product, pk=self.kwargs['pk'])
+        product = get_object_or_404(Product, pk=self.kwargs["pk"])
         user = self.request.user
-        if user == product.owner or request.user.has_perm('catalog.can_unpublish_product'):
+        if user == product.owner or request.user.has_perm("catalog.can_unpublish_product"):
             if product.published is True:
                 product.published = False
             else:
                 product.published = True
             product.save()
 
-        return redirect('catalog:products')
+        return redirect("catalog:products")
 
 
-class ProductUpdateView(LoginRequiredMixin, ImageHandlingMixin, SuccessMessageMixin,
-                        UpdateView):
+class ProductUpdateView(LoginRequiredMixin, ImageHandlingMixin, SuccessMessageMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "products/product_form.html"
@@ -206,7 +205,7 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         obj = self.get_object()
 
         # Проверяем, принадлежит ли пользователь группе Модераторов
-        is_moderator = Group.objects.filter(name='Модератор продуктов', user=self.request.user).exists()
+        is_moderator = Group.objects.filter(name="Модератор продуктов", user=self.request.user).exists()
 
         # Если пользователь не является ни владельцем, ни модератором, запрещаем удаление
         if not (is_moderator or obj.owner == self.request.user):
@@ -223,15 +222,16 @@ class ProductListView(LoginRequiredMixin, ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        if self.request.user.is_superuser or self.request.user.has_perm('catalog.can_unpublish_product'):
+        if self.request.user.is_superuser or self.request.user.has_perm("catalog.can_unpublish_product"):
             queryset = super().get_queryset()  # Показываем ВСЕ товары, если у пользователя есть соответствующее право
         else:
-            queryset = super().get_queryset().filter(
-                owner=self.request.user)  # Иначе показываем только собственные товары
-        return queryset.order_by('-updated_at')
+            queryset = (
+                super().get_queryset().filter(owner=self.request.user)
+            )  # Иначе показываем только собственные товары
+        return queryset.order_by("-updated_at")
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "products/product_detail.html"
@@ -241,5 +241,6 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user  # Добавляем текущего пользователя в контекст
         return context
+
 
 #################################################################################################

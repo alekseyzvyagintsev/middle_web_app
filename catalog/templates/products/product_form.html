@@ -9,51 +9,14 @@
             {% csrf_token %}
             {{ form.as_p }}
             {% if product.published is True %}
-                <button type="submit" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Отменить публикацию
+                <button type="submit" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Сохранить
                 </button>
             {% endif %}
             {% if product.published is False or product.published is None %}
                 <button type="submit" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Опубликовать
                 </button>
             {% endif %}
-{#            <button type="submit" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Сохранить</button>#}
             <a href="{% url 'catalog:products' %}" class="btn btn-lg btn-block btn-outline-secondary">Отмена</a>
         </form>
     </div>
-    {#<div class="col-lg-3 col-md-6 col-sm-12">#}
-    {#    <div class="card mb-4">#}
-    {#        <div class="card-header">#}
-    {#            <h4 class="my-0 font-weight-normal">Создание нового товара</h4>#}
-    {#        </div>#}
-    {#        <div class="card-body">#}
-    {#            <form method="post" action="" class="form-floating" enctype="multipart/form-data">#}
-    {#                {% csrf_token %}#}
-    {#                {{ form.as_p }}#}
-    {#                <div class="mb-3 mt-3">#}
-    {#                    <input class="form-control" type="text" name="name" required placeholder="* Отображаемое наименование товара">#}
-    {#                </div>#}
-    {#                <div class="mb-3 mt-3">#}
-    {#                    <input class="form-control" type="number" step="any" min="0" name="price" required placeholder="* Цена товара">#}
-    {#                </div>#}
-    {#                <div class="mb-3 mt-3">#}
-    {#                    <textarea class="form-control" type="text" name="description" rows="5" required placeholder="* Описание товара"></textarea>#}
-    {#                </div>#}
-    {#                <div class="mb-3 mt-3">#}
-    {#                    <input class="form-control" list="datalistOptions" name="category_name" required placeholder="* Выберите категорию товара">#}
-    {#                        <datalist id="datalistOptions">#}
-    {#                            {% for category in categories %}#}
-    {#                                <option value={{ category.name }}>#}
-    {#                            {% endfor %}#}
-    {#                        </datalist>#}
-    {#                </div>#}
-    {#                <div class="mb-3 mt-3">#}
-    {#                    <input class="form-control" type="file" id="image" name="image" placeholder="Выберите файл изображения">#}
-    {#                </div>#}
-    {#                <p>* - Обязательные для заполнения поля.</p>#}
-    {#                <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Отправить</button>#}
-    {#                <a href="{% url 'catalog:product_list' %}" class="btn btn-lg btn-block btn-outline-secondary">Отмена</a>#}
-    {#            </form>#}
-    {#        </div>#}
-    {#    </div>#}
-    {#</div>#}
 {% endblock %}

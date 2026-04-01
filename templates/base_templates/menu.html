@@ -23,8 +23,13 @@
                     {% endif %}
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn btn-outline-light text-light" href="{% url 'blog:active_articles' %}">Список
-                        статей</a>
+                    <a class="nav-link btn btn-outline-light text-light" href="{% url 'blog:active_articles' %}">Активные статьи</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light text-light" href="{% url 'blog:archive_articles' %}">Архив статей</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light text-light" href="{% url 'blog:create_blog_article' %}">Создать статью</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class='nav-item pl-5 pr-1'>
