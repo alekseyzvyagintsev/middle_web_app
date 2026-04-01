@@ -1,0 +1,71 @@
+[
+{
+  "model": "catalog.category",
+  "pk": 1,
+  "fields": {
+    "name": "tv",
+    "description": "Телевизоры",
+    "updated_at": "2026-04-01T13:51:59.773Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 1,
+  "fields": {
+    "name": "Haier",
+    "description": "Телевизор 55 Smart TV M1 55\" 4K UHD, черно-серый",
+    "image": "",
+    "category": 1,
+    "price": 30000.0,
+    "created_at": "2026-04-01T13:51:59.779Z",
+    "updated_at": "2026-04-01T13:51:59.779Z",
+    "published": true,
+    "owner": 1
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 2,
+  "fields": {
+    "name": "STARWIND",
+    "description": "Телевизор SW-LED58UG401 58\" 4K UHD, серый металлик",
+    "image": "",
+    "category": 1,
+    "price": 29000.0,
+    "created_at": "2026-04-01T13:51:59.784Z",
+    "updated_at": "2026-04-01T13:51:59.784Z",
+    "published": true,
+    "owner": 1
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 3,
+  "fields": {
+    "name": "Hartens",
+    "description": "Телевизор HT-32H06B-VZ/M 32\" HD, черный",
+    "image": "",
+    "category": 1,
+    "price": 10000.0,
+    "created_at": "2026-04-01T13:51:59.788Z",
+    "updated_at": "2026-04-01T13:51:59.788Z",
+    "published": true,
+    "owner": 1
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 4,
+  "fields": {
+    "name": "TLC",
+    "description": "Телевизор 75V6B 75\" 4K UHD, черный",
+    "image": "",
+    "category": 1,
+    "price": 49500.0,
+    "created_at": "2026-04-01T13:51:59.792Z",
+    "updated_at": "2026-04-01T13:51:59.792Z",
+    "published": true,
+    "owner": 1
+  }
+}
+]

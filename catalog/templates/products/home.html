@@ -3,30 +3,34 @@
 
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Список товаров</h1>
+    <h1 class="display-4">Список опубликованных товаров</h1>
 </div>
 
 <div class="container mt-5 mb-5">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-4 g-5">
         {% for product in products %}
-            <div class="col">
-                <div class="card h-100 d-flex flex-column shadow-sm" style="width: 15rem;">
-                    {% if product.image %}
-                        <p><img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}"></p>
-                    {% endif %}
-                    <div class="card-body flex-grow-1">
-                        <h2 class="card-text">{{ product.price }} р.</h2>
-                        <a class="card-link" href="{% url 'catalog:product_detail' product.id %}">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                        </a>
-                        <p class="card-text">{{ product.category }}</p>
-                        <p class="card-text">{{ product.description | truncatechars:100 }}</p>
-                    </div>
-                    <div class="card-footer d-flex align-items-end pb-3 pt-0">
-                        <a href="#" class="btn btn-primary w-100 mt-3">Купить</a>
+            {% if product.published is True %}
+                <div class="col">
+                    <div class="card h-100 d-flex flex-column shadow-sm" style="width: 15rem;">
+                        {% if product.image %}
+                            <p><img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}"></p>
+                        {% endif %}
+                        <div class="card-body flex-grow-1">
+                            <h2 class="card-text">{{ product.price }} р.</h2>
+                            <a class="card-link" href="{% url 'catalog:product_detail' product.id %}">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                            </a>
+                            <p class="card-text">{{ product.category }}</p>
+                            <p class="card-text">{{ product.description | truncatechars:100 }}</p>
+                            <p class="card-text">Автор:</p>
+                            <p class="card-text">{{ product.owner }}</p>
+                        </div>
+                        <div class="card-footer d-flex align-items-end pb-3 pt-0">
+                            <a href="#" class="btn btn-primary w-100 mt-3">Купить</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         {% endfor %}
     </div>
 </div>

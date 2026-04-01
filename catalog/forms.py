@@ -76,4 +76,5 @@ class ProductForm(StileFormMixin, forms.ModelForm):
 
         return image_field
 
+
 #########################################################################################################

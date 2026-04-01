@@ -1,7 +1,7 @@
 ######################################################################################
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage.filesystem import FileSystemStorage
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls.base import reverse_lazy
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, DeleteView, FormMixin, UpdateView

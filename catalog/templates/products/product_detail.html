@@ -2,22 +2,47 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <h1 class="display-4">{{ product.name }}</h1>
-    </div>
+    <div class="container mt-5">
+        <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <h1 class="display-4">{{ product.name }}</h1>
+            {% if product.published is True %}
+                <h3 class="card-text">Опубликован</h3>
+            {% endif %}
+            {% if product.published is False %}
+                <h3 class="card-text" style="color: red;">Не опубликован</h3>
+            {% endif %}
+        </div>
 
-    <div class="container">
-        <h1>{{ product.price }} р.</h1>
-        <p>Описание: {{ product.description }}</p>
-        {% if product.image %}
-            <p><img src="{{ product.image.url }}" alt="{{ product.name }}"></p>
-        {% else %}
-            Изображение {{ product.name }} отсутствует
+        <div class="container">
+            <h1>{{ product.price }} р.</h1>
+            <p>Описание: {{ product.description }}</p>
+            {% if product.image %}
+                <p><img src="{{ product.image.url }}" alt="{{ product.name }}"></p>
+            {% else %}
+                Изображение {{ product.name }} отсутствует
+            {% endif %}
+        </div>
+        {% if user == product.owner or perms.catalog.can_unpublish_product %}
+            <form method="post" action="{% url 'catalog:unpublish_product' product.id %}">
+                {% csrf_token %}
+                {% if product.published is True %}
+                    <button type="submit" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Отменить публикацию
+                    </button>
+                {% endif %}
+                {% if product.published is False %}
+                    <button type="submit" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Опубликовать
+                    </button>
+                {% endif %}
+            </form>
         {% endif %}
+        {% if user == product.owner or perms.catalog.change_product %}
+            <a href="{% url 'catalog:product_update' product.id %}"
+               class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Редактировать</a>
+        {% endif %}
+        {% if user == product.owner or perms.catalog.delete_product %}
+            <a href="{% url 'catalog:product_delete' product.id %}"
+               class="btn btn-lg btn-block btn-outline-danger mt-3 mb-1">Удалить</a>
+        {% endif %}
+        <a href="{% url 'catalog:products' %}" class="btn btn-lg btn-block btn-outline-secondary mt-3 mb-1">Вернуться к списку</a>
     </div>
-    <a href="{% url 'catalog:product_update' product.id %}" class="btn btn-lg btn-block btn-outline-primary mt-3 mb-1">Редактировать</a>
-    <a href="{% url 'catalog:product_delete' product.id %}" class="btn btn-lg btn-block btn-outline-danger" mt-3 mb-1>Удалить</a>
-    <a href="{% url 'catalog:products' %}" class="btn btn-lg btn-block btn-outline-secondary">Вернуться к списку</a>
-</div>
 {% endblock %}

@@ -1,0 +1,119 @@
+[
+{
+  "model": "blog.blogentry",
+  "pk": 1,
+  "fields": {
+    "title": "Тестовый пост 763",
+    "entry": "Тестовое содержание поста 787",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.261Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 1
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 2,
+  "fields": {
+    "title": "Тестовый пост 980",
+    "entry": "Тестовое содержание поста 371",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.264Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 1
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 3,
+  "fields": {
+    "title": "Тестовый пост 144",
+    "entry": "Тестовое содержание поста 798",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.266Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 1
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 4,
+  "fields": {
+    "title": "Тестовый пост 445",
+    "entry": "Тестовое содержание поста 834",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.268Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 2
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 5,
+  "fields": {
+    "title": "Тестовый пост 400",
+    "entry": "Тестовое содержание поста 904",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.271Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 2
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 6,
+  "fields": {
+    "title": "Тестовый пост 688",
+    "entry": "Тестовое содержание поста 195",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.273Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 2
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 7,
+  "fields": {
+    "title": "Тестовый пост 344",
+    "entry": "Тестовое содержание поста 644",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.274Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 3
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 8,
+  "fields": {
+    "title": "Тестовый пост 684",
+    "entry": "Тестовое содержание поста 521",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.277Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 3
+  }
+},
+{
+  "model": "blog.blogentry",
+  "pk": 9,
+  "fields": {
+    "title": "Тестовый пост 535",
+    "entry": "Тестовое содержание поста 207",
+    "image": "",
+    "created_at": "2026-04-01T13:51:57.279Z",
+    "is_active": true,
+    "view_counter": 0,
+    "user": 3
+  }
+}
+]

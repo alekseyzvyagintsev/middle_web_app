@@ -1,11 +1,12 @@
 #################################################################################################
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.files.storage import FileSystemStorage
-from django.urls import reverse_lazy
-from django.views.generic import DetailView, UpdateView, DeleteView
-from django.views.generic.edit import CreateView, FormMixin
-from django.core.mail import send_mail
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.core.files.storage import FileSystemStorage
+from django.core.mail import send_mail
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, DetailView, UpdateView
+from django.views.generic.edit import CreateView, FormMixin
 
 from config import settings
 from users.forms import CustomUserCreationForm, ProfileEditForm
@@ -40,10 +41,21 @@ class AvatarHandlingMixin(FormMixin):
         return super().form_valid(form)
 
 
+class CustomLoginView(LoginView):
+    model = CustomUser
+    template_name = "users/login.html"  # Укажите ваш шаблон
+
+    def get_success_url(self):
+        # Получаем id пользователя после успешной авторизации
+        user_id = self.request.user.id
+        # Формируем URL с id пользователя
+        return reverse_lazy("users:profile", kwargs={"pk": user_id})
+
+
 class RegisterView(CreateView):
-    template_name = 'users/register.html'
+    template_name = "users/register.html"
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('users:login')
+    success_url = reverse_lazy("users:login")
 
     def form_valid(self, form):
         user = form.save()
@@ -52,23 +64,23 @@ class RegisterView(CreateView):
         return super().form_valid(form)
 
     def send_welcome_email(self, user_email):
-        subject = 'Добро пожаловать в наш сервис'
-        message = 'Спасибо, что зарегистрировались в нашем сервисе!'
+        subject = "Добро пожаловать в наш сервис"
+        message = "Спасибо, что зарегистрировались в нашем сервисе!"
         recipient_list = [user_email]
         send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = CustomUser
-    template_name = 'users/profile.html'
+    template_name = "users/profile.html"
     context_object_name = "user"
 
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     model = CustomUser
-    template_name = 'users/user_confirm_delete.html'
+    template_name = "users/user_confirm_delete.html"
     context_object_name = "user"
-    success_url = reverse_lazy('catalog:home')
+    success_url = reverse_lazy("catalog:home")
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
