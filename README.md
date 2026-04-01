@@ -100,24 +100,34 @@ cp .env.example .env
 2. Заполните необходимые переменные в `.env` файле:
    - SECRET_KEY: секретный ключ Django
    - DEBUG: режим отладки (True/False)
-   - ALLOWED_HOSTS: разрешенные хосты
-   - DATABASE_URL: URL подключения к базе данных
-   - EMAIL_HOST_USER: email для отправки писем
+   - ALLOWED_HOSTS: разрешенные хосты (например, '*')
+   - DB_HOST: HOST для подключения к базе данных (по умолчанию 'localhost')
+   - EMAIL_HOST_USER: email для отправки писем (обратитесь к описанию настройки почтового сервера)
 
 ### Применение миграций
 ```
 python manage.py migrate
 ```
 
-### Загрузка фикстур (опционально)
-```
-python manage.py loaddata catalog_fixture.json
-python manage.py loaddata group_fixture.json
-```
-
 ### Создание суперпользователя (опционально)
 ```
 python manage.py createsuperuser
+```
+
+### Заполнение базы данных тестовыми данными (опционально)
+```
+python manage.py cau (создание групп и пользователей admin, moderator, user)
+python manage.py fill_blog (заполнение блога)
+python manage.py add_products (добавление товаров)
+или смотри Загрузка фикстур
+```
+
+### Загрузка фикстур (опционально)
+```
+python manage.py loaddata group_fixture.json (загрузка групп)
+python manage.py loaddata users_fixture.json (загрузка пользователей)
+python manage.py loaddata catalog_fixture.json (загрузка категорий и товаров)
+python manage.py loaddata blog_fixture.json (загрузка статей)
 ```
 
 ### Запуск сервера
