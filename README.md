@@ -78,23 +78,23 @@
 ## Инструкции по запуску
 
 ### Клонирование репозитория
-```
+```bash
 git clone https://github.com/alekseyzvyagintsev/middle_web_app.git
 ```
 
 ### Настройка окружения
-```
+```bash
 cd middle_web_app
 poetry install
 ```
 или
-```
+```bash
 pip install -r requirements.txt
 ```
 
 ### Настройка переменных окружения
 1. Создайте файл `.env` в корне проекта на основе примера:
-```
+```bash
 cp .env.example .env
 ```
 2. Заполните необходимые переменные в `.env` файле:
@@ -105,17 +105,17 @@ cp .env.example .env
    - EMAIL_HOST_USER: email для отправки писем (обратитесь к описанию настройки почтового сервера)
 
 ### Применение миграций
-```
+```bash
 python manage.py migrate
 ```
 
 ### Создание суперпользователя (опционально)
-```
+```bash
 python manage.py createsuperuser
 ```
 
 ### Заполнение базы данных тестовыми данными (опционально)
-```
+```bash
 (создание групп и пользователей admin, moderator, user. У всех пользователей password = zxcm3490)
 python manage.py cau
 
@@ -129,7 +129,7 @@ python manage.py add_products
 ```
 
 ### Загрузка фикстур (опционально)
-```
+```bash
 (загрузка групп)
 python manage.py loaddata fixture_group.json
 
@@ -144,7 +144,7 @@ python manage.py loaddata fixture_blog.json
 ```
 
 ### Запуск сервера
-```
+```bash
 python manage.py runserver
 ```
 
